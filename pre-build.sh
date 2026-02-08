@@ -13,10 +13,11 @@ sed -i "s/^SRC_VER = $CURRENT_VERSION/SRC_VER = $ZAPRET_VERSION/" "$NFQWS_DIR/Ma
 grep -q "^SRC_VER = $ZAPRET_VERSION" "$NFQWS_DIR/Makefile" && echo "✓ Zapret version updated" || (echo "Update failed" && exit 1)
 echo "Done."
 
+
 set -e  # Прерывать при ошибках
 
 FILENAME="TL_EC220_G5-V3.tar.gz"
-TARGET_DIR="padavan-ng/trunk/configs/TPLINK"
+TARGET_DIR="padavan-ng/trunk/configs/boards/TPLINK"
 
 echo "=== Распаковка $FILENAME ==="
 
@@ -50,16 +51,15 @@ fi
 
 echo "Файл создан: $FILENAME ($(stat -c%s "$FILENAME") байт)"
 
-# Копирование в целевую директорию (ОТНОСИТЕЛЬНЫЙ ПУТЬ!)
-echo "Копирую в $TARGET_DIR..."
+# Распаковка в целевую директорию
+echo "Распаковываю в $TARGET_DIR..."
 mkdir -p "$TARGET_DIR"
 
-if cp "$FILENAME" "$TARGET_DIR/"; then
-    echo "УСПЕХ: Файл скопирован в $TARGET_DIR"
-    ls -la "$TARGET_DIR/$FILENAME"
+if tar -xzf "$FILENAME" -C "$TARGET_DIR"; then
+    echo "УСПЕХ: Архив распакован в $TARGET_DIR"
+    ls -la "$TARGET_DIR/"
 else
-    echo "ВНИМАНИЕ: Не удалось скопировать в $TARGET_DIR"
-    echo "   Файл остался в: $(pwd)/$FILENAME"
+    echo "ОШИБКА: Не удалось распаковать архив"
     exit 1
 fi
 
