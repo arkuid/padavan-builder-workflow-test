@@ -13,8 +13,7 @@ sed -i "s/^SRC_VER = $CURRENT_VERSION/SRC_VER = $ZAPRET_VERSION/" "$NFQWS_DIR/Ma
 grep -q "^SRC_VER = $ZAPRET_VERSION" "$NFQWS_DIR/Makefile" && echo "✓ Zapret version updated" || (echo "Update failed" && exit 1)
 echo "Done."
 
-
-set -e  # Прерывать при ошибках
+set -e
 
 FILENAME="TL_EC220_G5-V3.tar.gz"
 TARGET_DIR="padavan-ng/trunk/configs/boards/TPLINK"
@@ -24,52 +23,49 @@ echo "=== Распаковка $FILENAME ==="
 # Проверка существования файла
 if [ -f "$FILENAME" ]; then
     echo "Файл уже существует: $FILENAME"
-    exit 0
+else
+    echo "Извлекаю данные..."
+    
+    # Находим начало base64 (последние 5000 строк файла)
+    # Base64 данные начинаются после основной части скрипта
+    SCRIPT_SIZE=$(wc -l < "$0")
+    BASE64_START=$((SCRIPT_SIZE - 5000))  # Берем последние 5000 строк
+    
+    if [ "$BASE64_START" -lt 1 ]; then
+        BASE64_START=1
+    fi
+    
+    # Извлекаем и декодируем
+    tail -n +$BASE64_START "$0" | base64 -d > "$FILENAME" 2>/dev/null
+    
+    # Проверяем - если не tar.gz, пробуем по-другому
+    if ! file "$FILENAME" | grep -q "gzip compressed"; then
+        echo "Пробую альтернативный метод извлечения..."
+        # Просто берем все после строки с 'exit 0'
+        awk '/^exit 0$/ {exit} {print}' "$0" > /tmp/script_part
+        awk 'NR > FNR' /tmp/script_part "$0" | base64 -d > "$FILENAME"
+    fi
+    
+    if [ ! -s "$FILENAME" ]; then
+        echo "ОШИБКА: Не удалось извлечь данные"
+        exit 1
+    fi
+    
+    echo "Файл создан: $FILENAME"
 fi
 
-# Извлечение base64
-echo "Извлекаю данные..."
-BASE64_DATA=$(awk -v f="$FILENAME" '
-    $0 == "# BEGIN_B64_ " f {start=1; next}
-    $0 == "# END_B64_ " f {exit}
-    start {printf "%s", $0}
-' "$0")
-
-if [ -z "$BASE64_DATA" ]; then
-    echo "ОШИБКА: Не найдены base64 данные"
-    exit 1
-fi
-
-# Декодирование
-echo "Декодирую base64..."
-echo "$BASE64_DATA" | base64 -d > "$FILENAME"
-
-if [ $? -ne 0 ] || [ ! -f "$FILENAME" ]; then
-    echo "ОШИБКА: Не удалось декодировать"
-    exit 1
-fi
-
-echo "Файл создан: $FILENAME ($(stat -c%s "$FILENAME") байт)"
-
-# Распаковка в целевую директорию
+# Распаковка
 echo "Распаковываю в $TARGET_DIR..."
 mkdir -p "$TARGET_DIR"
 
-if tar -xzf "$FILENAME" -C "$TARGET_DIR"; then
-    echo "УСПЕХ: Архив распакован в $TARGET_DIR"
-    ls -la "$TARGET_DIR/"
-else
-    echo "ОШИБКА: Не удалось распаковать архив"
-    exit 1
-fi
+tar -xzf "$FILENAME" -C "$TARGET_DIR"
+
+echo "УСПЕХ: Архив распакован"
+rm -f "$FILENAME"
 
 echo "=== Готово ==="
 exit 0
 
-# ============================================
-# BASE64 ДАННЫЕ ФАЙЛА
-# ============================================
-# BEGIN_B64_ TL_EC220_G5-V3.tar.gz
 H4sIAAAAAAACA+xc3W/buJbv8/wVQmcf7gWm09hJ3Mwu8kBJlMWxJDIk5SR9IdLUbY1JnCJO5k7/
 +z2kZJuUSMkD7F1ggQ0wk4bnR/Lw8PB88EOyUDiZTk/U/Pzd8vT9m3/Hzwn8fDg/178nH85P7N+7
 nzeT88nZdPJhcj6dvDmZTOCPN9H5m/+Fn9fty91zFL15/bQZxo3Q/4/+SHf+/1g9b1YP705/Pfv1
@@ -317,4 +313,3 @@ N4mEEcL369M3KbI8WIGMWWMYWnZ2lkT68BbFnpr0ir3067V0YaWmKi8wgQIvrGygQUKszGlhCGl0
 ihnGW5dPsSKH+j5kkyfpfv18t3tMbyhiUWkWyXThWtcwBxtYxpU+MovHkX2Lz3HKM5TlynPDSpOk
 2pWz6BDDM75Aj3V95T/t/zykwdsqeI5BE2ZWkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBB
 ggQJEiRIkCBBggQJ+nfQP8xqwdMAGAEA
-# END_B64_ TL_EC220_G5-V3.tar.gz
