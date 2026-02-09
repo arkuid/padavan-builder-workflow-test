@@ -31,8 +31,8 @@ jobs:
 
     - name: Get variables
       run: |
-        sed -i 's|\r$||g' variables "$ROUTER_MODEL/trunk/.config"
-        . <(cat variables "$ROUTER_MODEL/trunk/.config")
+        sed -i 's|\r$||g' variables "$ROUTER_MODEL"/trunk/.config
+        . <(cat variables "$ROUTER_MODEL"/trunk/.config")
         PADAVAN_THEMES="${PADAVAN_THEMES[*]}"
         for v in "${!PADAVAN_@}" "${!CONFIG_@}"; do
           echo "$v=${!v}" >> $GITHUB_ENV
