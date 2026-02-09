@@ -72,7 +72,6 @@ jobs:
 
     - name: Build firmware
       run: |
-        cp build.config padavan-ng/trunk/.config
         cd padavan-ng/trunk
         ./clear_tree.sh
         ./build_firmware.sh
