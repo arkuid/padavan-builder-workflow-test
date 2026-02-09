@@ -1,0 +1,36 @@
+/* MERCUSYS AC12G v1 */
+
+#define BOARD_PID		"AC12G-V1"
+#define BOARD_NAME		"AC12G-V1"
+#define BOARD_DESC		"TP-Link Archer C5 Wireless Router"
+#define BOARD_VENDOR_NAME	"TP-LINK Technologies CO., LTD."
+#define BOARD_VENDOR_URL	"https://www.mercusys.com/ru/"
+#define BOARD_MODEL_URL		"https://www.mercusys.com/ru/download/ac12g/v1/"
+#define BOARD_BOOT_TIME		25
+#define BOARD_FLASH_TIME	120
+#define BOARD_GPIO_BTN_RESET	13
+#undef  BOARD_GPIO_BTN_WPS
+#undef  BOARD_GPIO_LED_ALL
+#undef  BOARD_GPIO_LED_WIFI
+#define BOARD_GPIO_LED_SW2G 72
+#define BOARD_GPIO_LED_SW5G 72
+#define	BOARD_GPIO_LED_POWER	42
+#define BOARD_GPIO_LED_LAN	43
+#define BOARD_GPIO_LED_WAN	7
+#undef  BOARD_GPIO_LED_WAN_INVERTED
+#undef  BOARD_GPIO_LED_WAN_PHY
+#undef  BOARD_GPIO_LED_WAN_PHY_INVERTED
+#undef  BOARD_GPIO_LED_USB
+#undef  BOARD_GPIO_LED_ROUTER
+#undef  BOARD_GPIO_PWR_USB_ON
+#undef  BOARD_GPIO_PWR_USB
+#undef  BOARD_GPIO_PWR_USB2
+#define BOARD_HAS_5G_11AC	1
+#define BOARD_NUM_ANT_5G_TX	2
+#define BOARD_NUM_ANT_5G_RX	2
+#define BOARD_NUM_ANT_2G_TX	2
+#define BOARD_NUM_ANT_2G_RX	2
+#define BOARD_NUM_ETH_LEDS	2
+#define BOARD_NUM_ETH_EPHY      4
+#define BOARD_HAS_EPHY_L1000	1
+#define BOARD_HAS_EPHY_W1000	1
