@@ -72,7 +72,6 @@ jobs:
 
     - name: Run custom pre-build script
       run: |
-        cd "${{ github.workspace }}/workspace"
         [[ -f pre-build2.sh ]] && . pre-build2.sh || :
 
     - name: Build firmware
