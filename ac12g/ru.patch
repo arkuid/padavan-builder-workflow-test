@@ -1,5 +1,5 @@
---- a/trunk/user/scripts/mtd_storage.sh
-+++ b/trunk/user/scripts/mtd_storage.sh
+--- a/padavan-ng/trunk/user/scripts/mtd_storage.sh
++++ b/padavan-ng/trunk/user/scripts/mtd_storage.sh
 @@ -499,7 +499,7 @@ EOF
  # Custom user servers file for dnsmasq
  
@@ -9,8 +9,8 @@
  
  EOF
  		chmod 644 "$user_dnsmasq_servers"
---- a/trunk/user/shared/defaults.h
-+++ b/trunk/user/shared/defaults.h
+--- a/padavan-ng/trunk/user/shared/defaults.h
++++ b/padavan-ng/trunk/user/shared/defaults.h
 @@ -33,8 +33,8 @@
  #define DEF_LAN_DHCP_END	"192.168.1.244"
  #define DEF_LAN_MASK		"255.255.255.0"
