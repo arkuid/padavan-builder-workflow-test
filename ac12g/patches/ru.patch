@@ -1,0 +1,38 @@
+--- a/trunk/user/scripts/mtd_storage.sh
++++ b/trunk/user/scripts/mtd_storage.sh
+@@ -499,7 +499,7 @@ EOF
+ # Custom user servers file for dnsmasq
+ 
+ ### Use time server update bypassing DoT/DoH
+-server=/ntp.org/time.cloudflare.com/time.google.com/time.in.ua/1.1.1.1
++server=/ntp.org/time.cloudflare.com/time.google.com/ntp0.ntp-servers.net/1.1.1.1
+ 
+ EOF
+ 		chmod 644 "$user_dnsmasq_servers"
+--- a/trunk/user/shared/defaults.h
++++ b/trunk/user/shared/defaults.h
+@@ -33,8 +33,8 @@
+ #define DEF_LAN_DHCP_END	"192.168.1.244"
+ #define DEF_LAN_MASK		"255.255.255.0"
+ 
+-#define DEF_WLAN_2G_CC		"UA"
+-#define DEF_WLAN_5G_CC		"UA"
++#define DEF_WLAN_2G_CC		"RU"
++#define DEF_WLAN_5G_CC		"RU"
+ #define DEF_WLAN_2G_SSID	"Padavan_2.4GHz"
+ #define DEF_WLAN_5G_SSID	"Padavan_5GHz"
+ #define DEF_WLAN_2G_GSSID	"Padavan_GUEST_2.4GHz"
+@@ -44,11 +44,11 @@
+ 
+ #define DEF_ROOT_PASSWORD	"admin"
+ #define DEF_SMB_WORKGROUP	"WORKGROUP"
+-#define DEF_TIMEZONE		"EET-2EETDST"
++#define DEF_TIMEZONE		"UTC-3"
+ #define DEF_NTP_SERVER0		"pool.ntp.org"
+ #define DEF_NTP_SERVER1		"time.cloudflare.com"
+ #define DEF_NTP_SERVER2		"time.google.com"
+-#define DEF_NTP_SERVER3		"time.in.ua"
++#define DEF_NTP_SERVER3		"ntp0.ntp-servers.net"
+ #ifdef SUPPORT_OPENSSL_EC
+ #define DEF_HTTPS_CIPH_LIST	"ECDH+CHACHA20:ECDH+AESGCM:DH+AESGCM:DH+AES256:DH+AES:DH+3DES:RSA+AES:RSA+3DES:!ADH:!MD5:!DSS"
+ #else
