@@ -1,0 +1,62 @@
+--- a/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
++++ b/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
+@@ -13948,23 +13948,46 @@ rtk_api_ret_t rtk_switch_init(void)
+         init_size = (sizeof(ChipData31) / ((sizeof(rtk_uint16))*2));
+     }
+     else
+-    {
+-        init_para = ChipData30;
+-        init_size = (sizeof(ChipData30) / ((sizeof(rtk_uint16))*2));
+-    }
+-    {
+-        /* RTTL8367B_CHIP_NUMBER_REG             0x1300*/
+-        /* For RTL8367S [0x1300] = (0x6367  | 0x0597 | 0x0276) */
+-        rtk_uint32 chip_num;
+-        if((retVal = rtl8367b_getAsicReg(0x1300, &chip_num)) != RT_ERR_OK)
+-            return retVal;
++{
++    rtk_uint32 chip_num;
++    rtk_uint32 chip_ver;
+ 
+-        if (chip_num == 0x6367 || chip_num == 0x0597 || chip_num == 0x0276) {
+-            printk("Realtek RTL8367S detected\n");
++    /* default: RTL8367B */
++    init_para = ChipData30;
++    init_size = (sizeof(ChipData30) / ((sizeof(rtk_uint16)) * 2));
++
++    if ((retVal = rtl8367b_getAsicReg(0x1300, &chip_num)) != RT_ERR_OK)
++        return retVal;
++
++    if ((retVal = rtl8367b_getAsicReg(0x1301, &chip_ver)) != RT_ERR_OK)
++        return retVal;
++
++    printk("RTL8367 detected: chip_num=0x%x chip_ver=0x%x\n",
++           chip_num, chip_ver);
++
++    /*
++     * chip_num == 0x6367 : RTL8367 family
++     * chip_ver:
++     *   0x0001 - RTL8367B
++     *   0x0020 - RTL8367C
++     *   0x00A0 - RTL8367S
++     */
++    if (chip_num == 0x6367) {
++        switch (chip_ver) {
++        case 0x0020: /* RTL8367C */
++        case 0x00A0: /* RTL8367S */
++            printk("Using RTL8367C/S init table\n");
+             init_para = ChipData30s;
+-            init_size = (sizeof(ChipData30s) / ((sizeof(rtk_uint16))*2));
++            init_size = (sizeof(ChipData30s) / ((sizeof(rtk_uint16)) * 2));
++            break;
++
++        default: /* RTL8367B or unknown */
++            printk("Using RTL8367B init table\n");
++            break;
+         }
+     }
++}
++
+ 
+ #elif defined(CHIP_RTL8367R_VB)
+     if(data & 0xF000)
