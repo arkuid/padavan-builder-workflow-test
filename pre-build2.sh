@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ls -la
 ZAPRET_VERSION="72.9"
 NFQWS_DIR="padavan-ng/trunk/user/nfqws"
 echo "Cleaning old zapret files..."
