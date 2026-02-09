@@ -1,5 +1,5 @@
---- a/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
-+++ b/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
+--- a/padavan-ng/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
++++ b/padavan-ng/trunk/linux-3.4.x/drivers/net/rtl8367/api_8367b/rtk_api.c
 @@ -13948,23 +13948,46 @@ rtk_api_ret_t rtk_switch_init(void)
          init_size = (sizeof(ChipData31) / ((sizeof(rtk_uint16))*2));
      }
