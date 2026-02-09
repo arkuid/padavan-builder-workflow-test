@@ -55,15 +55,20 @@ jobs:
             cp -r "${{ github.workspace }}/themes/${theme}-theme" ${{ github.workspace }}/padavan-ng/trunk/user/www/n56u_ribbon_fixed
           done
         fi
-
+    - name: Debug repository structure
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Repository contents:"
+        ls -la
+        echo "Looking for ac12g directory:"
+        find . -name "*ac12g*" -type d 2>/dev/null || echo "Not found"
     - name: Apply patches and configs
       run: |
         WORKSPACE_PATH="${{ github.workspace }}/workspace"
-        cp -rv "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/." "${{ github.workspace }}/padavan-ng/"
-        cd "${{ github.workspace }}/padavan-ng"
-        for patch_file in "$WORKSPACE_PATH/$ROUTER_MODEL/patches/"*.patch; do
-          patch -p1 < "$patch_file"
-        done
+        if [[ -d "$WORKSPACE_PATH/$ROUTER_MODEL/trunk" ]]; then
+          echo "Copying configs from $WORKSPACE_PATH/$ROUTER_MODEL/trunk"
+          cp -rv "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/." "${{ github.workspace }}/padavan-ng/trunk/"
+        fi
 
     - name: Run custom pre-build script
       run: |
