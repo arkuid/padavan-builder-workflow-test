@@ -1,5 +1,5 @@
---- a/trunk/linux-3.4.x/drivers/char/ralink/ralink_gpio.c
-+++ b/trunk/linux-3.4.x/drivers/char/ralink/ralink_gpio.c
+--- a/padavan-ng/trunk/linux-3.4.x/drivers/char/ralink/ralink_gpio.c
++++ b/padavan-ng/trunk/linux-3.4.x/drivers/char/ralink/ralink_gpio.c
 @@ -1518,7 +1518,7 @@ int __init ralink_gpio_init(void)
  	gpiomode = le32_to_cpu(*(volatile u32 *)(RALINK_REG_GPIOMODE));
  	gpiomode &= ~(RALINK_GPIOMODE_DFT);		// clear bit[2:4] UARTF_SHARE_MODE
