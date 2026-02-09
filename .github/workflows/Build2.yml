@@ -31,6 +31,7 @@ jobs:
         PADAVAN_THEMES="${PADAVAN_THEMES[*]}"
         for v in "${!PADAVAN_@}" "${!CONFIG_@}"; do
           echo "$v=${!v}" >> $GITHUB_ENV
+        done
 
     - name: Set router model
       run: |
