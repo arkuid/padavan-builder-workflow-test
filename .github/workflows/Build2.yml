@@ -59,8 +59,7 @@ jobs:
     - name: Apply patches and configs
       run: |
         WORKSPACE_PATH="${{ github.workspace }}/workspace"
-        cp -rv "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/"* "${{ github.workspace }}/padavan-ng/"
-        cp "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/.config" "${{ github.workspace }}/padavan-ng/trunk/.config"
+        cp -rv "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/." "${{ github.workspace }}/padavan-ng/"
         cd "${{ github.workspace }}/padavan-ng"
         for patch_file in "$WORKSPACE_PATH/$ROUTER_MODEL/patches/"*.patch; do
           patch -p1 < "$patch_file"
