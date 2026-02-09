@@ -40,43 +40,40 @@ jobs:
     - name: Download sources and toolchain
       run: |
         git config --global --add safe.directory '*'
-        git clone -b "$PADAVAN_BRANCH" "$PADAVAN_REPO" ${{ github.workspace }}/padavan-ng
-        git -C ${{ github.workspace }}/padavan-ng checkout "$PADAVAN_COMMIT"
-        wget -qO- "$PADAVAN_TOOLCHAIN_URL" | tar -C ${{ github.workspace }}/padavan-ng --zstd -xf -
+        git clone -b "$PADAVAN_BRANCH" "$PADAVAN_REPO"
+        git -C padavan-ng checkout "$PADAVAN_COMMIT"
+        wget -qO- "$PADAVAN_TOOLCHAIN_URL" | tar -C padavan-ng --zstd -xf -
 
     - name: Install themes
       run: |
-        if [[ -n "${PADAVAN_THEMES:-}" ]]; then
-          git clone --depth 1 -b "$PADAVAN_THEMES_BRANCH" "$PADAVAN_THEMES_REPO" ${{ github.workspace }}/themes
-          cp -r ${{ github.workspace }}/themes/common-theme ${{ github.workspace }}/themes/jquery.js ${{ github.workspace }}/padavan-ng/trunk/user/www/n56u_ribbon_fixed
+        if [[ -n $PADAVAN_THEMES ]]; then
+          git clone --depth 1 -b "$PADAVAN_THEMES_BRANCH" "$PADAVAN_THEMES_REPO" themes
+          cp -r themes/common-theme themes/jquery.js padavan-ng/trunk/user/www/n56u_ribbon_fixed
 
           for theme in $PADAVAN_THEMES; do
             echo "Installing $theme theme"
-            cp -r "${{ github.workspace }}/themes/${theme}-theme" ${{ github.workspace }}/padavan-ng/trunk/user/www/n56u_ribbon_fixed
+            cp -r "themes/$theme-theme" padavan-ng/trunk/user/www/n56u_ribbon_fixed
           done
         fi
-    - name: Debug repository structure
+
+    - name: Copy configs & apply patches 
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Repository contents:"
         ls -la
-        echo "Looking for ac12g directory:"
-        find . -name "*ac12g*" -type d 2>/dev/null || echo "Not found"
-    - name: Apply patches and configs
-      run: |
-        WORKSPACE_PATH="${{ github.workspace }}/workspace"
-        if [[ -d "$WORKSPACE_PATH/$ROUTER_MODEL/trunk" ]]; then
-          echo "Copying configs from $WORKSPACE_PATH/$ROUTER_MODEL/trunk"
-          cp -rv "$WORKSPACE_PATH/$ROUTER_MODEL/trunk/." "${{ github.workspace }}/padavan-ng/trunk/"
-        fi
+        cp -rv "$ROUTER_MODEL/trunk/." "padavan-ng/trunk/"
+        for patch_file in "$ROUTER_MODEL/patches/"*.patch; do
+          if [ -f "$patch_file" ]; then
+            echo "Applying patch: $patch_file"
+            patch -p1 < "$patch_file"
+          fi
+        done
 
     - name: Run custom pre-build script
-      run: |
-        [[ -f pre-build2.sh ]] && . pre-build2.sh || :
+      run: '[[ -f pre-build2.sh ]] && . pre-build2.sh || :'
 
     - name: Build firmware
       run: |
-        cd ${{ github.workspace }}/padavan-ng/trunk
+        cp build.config padavan-ng/trunk/.config
+        cd padavan-ng/trunk
         ./clear_tree.sh
         ./build_firmware.sh
 
