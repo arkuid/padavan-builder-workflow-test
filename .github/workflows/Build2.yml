@@ -10,6 +10,7 @@ on:
         default: "ac12g"
         options:
           - "ac12g"
+          - "EC220-G5"
   push:
     tags:
       - '*'
