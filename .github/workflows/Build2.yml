@@ -59,8 +59,8 @@ jobs:
     - name: Copy configs & apply patches 
       run: |
         ls -la
-        cp -rv "$ROUTER_MODEL/trunk/." "padavan-ng/trunk/"
-        for patch_file in "$ROUTER_MODEL/patches/"*.patch; do
+        cp -rv "$ROUTER_MODEL/trunk/" "padavan-ng/trunk/"
+        for patch_file in "$ROUTER_MODEL/"*.patch; do
           if [ -f "$patch_file" ]; then
             echo "Applying patch: $patch_file"
             patch -p1 < "$patch_file"
