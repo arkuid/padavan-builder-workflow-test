@@ -23,20 +23,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Get variables
-      run: |
-        sed -i 's|\r$||g' variables
-        . <(cat variables)
-        PADAVAN_THEMES="${PADAVAN_THEMES[*]}"
-        for v in "${!PADAVAN_@}" "${!CONFIG_@}"; do
-          echo "$v=${!v}" >> $GITHUB_ENV
-        done
-
     - name: Set router model
       run: |
         ROUTER_MODEL="${{ github.event.inputs.router-model }}"
         echo "ROUTER_MODEL=$ROUTER_MODEL" >> $GITHUB_ENV
         echo "Using router model: $ROUTER_MODEL"
+
+    - name: Get variables
+      run: |
+        sed -i 's|\r$||g' variables "$ROUTER_MODEL/trunk/.config"
+        . <(cat variables "$ROUTER_MODEL/trunk/.config")
+        PADAVAN_THEMES="${PADAVAN_THEMES[*]}"
+        for v in "${!PADAVAN_@}" "${!CONFIG_@}"; do
+          echo "$v=${!v}" >> $GITHUB_ENV
+        done
 
     - name: Download sources and toolchain
       run: |
