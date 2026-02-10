@@ -13,3 +13,8 @@ echo "Updating zapret from $CURRENT_VERSION to $ZAPRET_VERSION"
 sed -i "s/^SRC_VER = $CURRENT_VERSION/SRC_VER = $ZAPRET_VERSION/" "$NFQWS_DIR/Makefile"
 grep -q "^SRC_VER = $ZAPRET_VERSION" "$NFQWS_DIR/Makefile" && echo "✓ Zapret version updated" || (echo "Update failed" && exit 1)
 echo "Done."
+
+
+RTL8367_DIR="padavan-ng/trunk/linux-3.4.x/drivers/net/rtl8367"
+echo "Cleaning old zapret files..."
+rm -r "$RTL8367_DIR"/rtl8367_drv.c "$RTL8367_DIR"/Makefile "$RTL8367_DIR"/Kconfig
