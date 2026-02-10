@@ -69,7 +69,7 @@ jobs:
         done
 
     - name: Run custom pre-build script
-      run: '[[ -f pre-build2.sh ]] && . pre-build2.sh || :'
+      run: '[[ -f pre-build-$ROUTER_MODEL.sh ]] && . pre-build-$ROUTER_MODEL.sh || :'
 
     - name: Build firmware
       run: |
@@ -83,7 +83,7 @@ jobs:
         echo "FW_FILE_NAME=$FW_FILE_NAME" >> $GITHUB_ENV
 
     - name: Run custom post-build script
-      run: '[[ -f post-build2.sh ]] && . post-build2.sh || :'
+      run: '[[ -f post-build-$ROUTER_MODEL.sh ]] && . post-build-$ROUTER_MODEL.sh || :'
 
     - name: Prepare artifacts
       run: |
