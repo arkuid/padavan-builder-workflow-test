@@ -11,6 +11,7 @@ on:
         options:
           - "ac12g"
           - "EC220-G5"
+          - "c5v4"
   push:
     tags:
       - '*'
