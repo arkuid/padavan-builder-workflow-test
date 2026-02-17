@@ -1,5 +1,5 @@
---- a/padavan-ng/trunk/user/scripts/mtd_storage.sh
-+++ b/padavan-ng/trunk/user/scripts/mtd_storage.sh
+--- a/padavan-ng-test/trunk/user/scripts/mtd_storage.sh
++++ b/padavan-ng-test/trunk/user/scripts/mtd_storage.sh
 @@ -499,7 +499,7 @@ EOF
  # Custom user servers file for dnsmasq
  
